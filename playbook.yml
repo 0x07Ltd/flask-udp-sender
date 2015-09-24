@@ -1,0 +1,25 @@
+---
+- hosts: all
+  sudo: yes
+  vars:
+    user: "ubuntu"
+    project_dir: "/home/{{ user }}/udp_sender"
+  tasks:
+    - name: Install setuptools
+      shell: wget https://bootstrap.pypa.io/ez_setup.py -O - | sudo python
+      when: install_setuptools
+
+    - name: Install pip with easy_install
+      easy_install: name=pip
+
+    - name: Make project dir
+      file:
+        dest: "{{ project_dir }}"
+        mode: 755
+        owner: "{{ user }}"
+        group: "{{ user }}"
+        state: directory
+        recurse: yes
+
+    - name: Deploy from git
+      
