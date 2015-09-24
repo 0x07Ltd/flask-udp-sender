@@ -22,4 +22,7 @@
         recurse: yes
 
     - name: Deploy from git
-      
+      git:
+        dest: "{{ project_dir }}"
+        repo: "https://github.com/0x07Ltd/flask-udp-sender.git"
+        version: master

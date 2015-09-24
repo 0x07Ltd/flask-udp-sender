@@ -24,13 +24,13 @@ class Form(Form):
 def index():
     form = Form()
     if form.validate_on_submit():
-        for i in range(form.count.data):
-            send(
-                dest_ip=form.destination_ip.data,
-                port=form.port.data,
-                src_ip=form.source_ip.data,
-                payload=form.payload.data
-            )
+        send(
+            dest_ip=form.destination_ip.data,
+            port=form.port.data,
+            src_ip=form.source_ip.data,
+            payload=form.payload.data,
+            count=form.count.data
+        )
         return "Sent %d packet(s)." % form.count.data
     return render_template("index.html", form=form)
 
