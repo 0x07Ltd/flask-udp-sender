@@ -3,7 +3,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.define :udp_sender do |node|
     node.vm.box = "precise64"
-    node.vm.hostname = "udp_sender"
+    node.vm.hostname = "udp-sender"
     node.vm.network :private_network, ip: "192.168.3.2"
     node.vm.synced_folder ".", "/vagrant/"
     node.vm.provision "ansible" do |ansible|

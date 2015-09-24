@@ -2,12 +2,24 @@
 - hosts: all
   sudo: yes
   vars:
-    user: "ubuntu"
-    project_dir: "/home/{{ user }}/udp_sender"
+    user: root
+    project_dir: "/root/udp_sender"
+  handlers:
+    - name: Update supervisor
+      command: supervisorctl update
   tasks:
+    - name: Install requirements from apt
+      apt:
+        name: "{{ item }}"
+        update_cache: yes
+        cache_valid_time: 3600
+      with_items:
+        - git
+        - supervisor
+        - wget
+
     - name: Install setuptools
       shell: wget https://bootstrap.pypa.io/ez_setup.py -O - | sudo python
-      when: install_setuptools
 
     - name: Install pip with easy_install
       easy_install: name=pip
@@ -26,3 +38,27 @@
         dest: "{{ project_dir }}"
         repo: "https://github.com/0x07Ltd/flask-udp-sender.git"
         version: master
+        force: yes
+
+    - name: Install project requirements with pip
+      pip:
+        requirements: "{{ project_dir }}/requirements.txt"
+
+    - name: Add supervisor config for project
+      template:
+        src: supervisor_program.conf
+        dest: "/etc/supervisor/conf.d/{{ item.name }}.conf"
+        owner: root
+        group: root
+        mode: 0664
+      notify: Update supervisor
+      with_items:
+        - name: udpsender
+          command: "python {{ project_dir }}/app.py"
+          directory: "{{ project_dir }}"
+          numprocs: 1
+          autostart: "true"
+          autorestart: "true"
+          user: root
+          stdout_logfile: /var/log/udpsender.log
+          redirect_stderr: "true"
