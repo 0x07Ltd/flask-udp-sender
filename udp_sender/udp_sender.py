@@ -1,12 +1,10 @@
-from flask import (Flask, request, session, g, redirect, url_for, abort, render_template, flash)
+from scapy.all import IP, UDP, L3RawSocket, conf
+from scapy.all import send as scapy_send
 
-DEBUG = True
-SECRET_KEY = "dev key"
-USERNAME = "user"
-PASSWORD = "useruser"
 
-app = Flask(__name__)
-app.config.from_object(__name__)
-
-if __name__ == "__main__":
-    app.run()
+def send(dest_ip, port, src_ip, payload):
+    if dest_ip in ("127.0.0.1", "localhost"):
+        conf.L3socket = L3RawSocket
+    ip = IP(dst=dest_ip, src=src_ip)
+    udp = UDP(dport=port)
+    scapy_send(ip/udp/str(payload))

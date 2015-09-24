@@ -1,0 +1,11 @@
+<form action="" method="POST">
+    {{ form.hidden_tag() }}
+    <dl>
+        <dt>{{ form.source_ip.label }}</dt> <dd>{{ form.source_ip(size=15) }} {{ form.errors.source_ip|join("; ") }}</dd>
+        <dt>{{ form.destination_ip.label }}</dt> <dd>{{ form.destination_ip(size=15) }} {{ form.errors.destination_ip|join("; ") }}</dd>
+        <dt>{{ form.port.label }}</dt> <dd>{{ form.port(size=5) }} {{ form.errors.port|join("; ") }}</dd>
+        <dt>{{ form.count.label }}</dt> <dd>{{ form.count(size=3) }} {{ form.errors.count|join("; ") }}</dd>
+        <dt>{{ form.payload.label }}</dt> <dd>{{ form.payload() }} {{ form.errors.payload|join("; ") }}</dd>
+        <input type="submit" value="Send" />
+    </dl>
+</form>
